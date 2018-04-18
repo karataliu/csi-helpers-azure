@@ -14,5 +14,15 @@ namespace Csi.Helpers.Azure.Tests
                 .BuildServiceProvider();
             Assert.NotNull(sp.GetRequiredService<IExternalRunner>());
         }
+
+        [Fact]
+        public void ServiceCollectionAddInstanceMetadataService()
+        {
+            var sp = new ServiceCollection()
+                .AddLogging()
+                .AddInstanceMetadataService()
+                .BuildServiceProvider();
+            Assert.NotNull(sp.GetRequiredService<IInstanceMetadataService>());
+        }
     }
 }
