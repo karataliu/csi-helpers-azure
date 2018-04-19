@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -17,6 +18,13 @@ namespace Csi.Helpers.Azure.Tests
             var objA = sp.GetService<ITestServiceA>();
             Assert.NotNull(objA);
             Assert.IsType<TestServiceAImpl1>(objA);
+        }
+
+        [Fact]
+        public void NotImplemented()
+        {
+            var sc = new ServiceCollection();
+            Assert.Throws<NotImplementedException>(() => sc.AddPlatformService<ITestServiceA>(psp => { }));
         }
     }
 

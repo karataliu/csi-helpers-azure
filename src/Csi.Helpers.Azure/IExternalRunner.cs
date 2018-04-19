@@ -4,6 +4,6 @@ namespace Csi.Helpers.Azure
 {
     public interface IExternalRunner
     {
-        Task RunExecutable(string path, string arguments);
+        Task RunExecutable(string path, params string[] arguments);
     }
 }

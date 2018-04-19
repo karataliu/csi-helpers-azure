@@ -17,12 +17,14 @@ namespace Csi.Helpers.Azure
             this.logger = logger;
         }
 
-        public async Task RunExecutable(string path, string arguments)
+        public async Task RunExecutable(string path, params string[] arguments)
         {
+            var argumentsStr = string.Join(" ", arguments);
+
             var info = new ProcessStartInfo
             {
                 FileName = path,
-                Arguments = arguments,
+                Arguments = argumentsStr,
                 UseShellExecute = false,
                 RedirectStandardOutput = !showStdout,
             };
