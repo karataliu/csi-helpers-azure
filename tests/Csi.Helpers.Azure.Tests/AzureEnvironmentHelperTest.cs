@@ -8,7 +8,7 @@ namespace Csi.Helpers.Azure.Tests
         [Fact]
         public void DefaultEnvironmentName()
         {
-            Assert.Equal("AzureGlobalCloud", AzureEnvironmentHelper.DefaultEnvironmentName);
+            Assert.Equal("AzureGlobalCloud1", AzureEnvironmentHelper.DefaultEnvironmentName);
         }
 
         [Fact]
