@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Util.Extensions.Logging.Step;
@@ -8,16 +7,18 @@ namespace Csi.Helpers.Azure
 {
     sealed class ExternalRunner : IExternalRunner
     {
-        private readonly bool showStdout;
+        private bool showStdout => config.ShowStdout;
+
+        private readonly ExternalRunnerConfig config;
         private readonly ILogger logger;
 
-        public ExternalRunner(bool showStdout, ILogger<ExternalRunner> logger)
+        public ExternalRunner(ExternalRunnerConfig config, ILogger<ExternalRunner> logger)
         {
-            this.showStdout = showStdout;
+            this.config = config;
             this.logger = logger;
         }
 
-        public async Task RunExecutable(string path, params string[] arguments)
+        public async Task<int> RunExecutable(string path, params string[] arguments)
         {
             var argumentsStr = string.Join(" ", arguments);
 
@@ -32,7 +33,9 @@ namespace Csi.Helpers.Azure
             int exitCode = 0;
             using (var _s = logger.StepDebug("Run executable: {0}", path))
             {
-                // For mount, arguments may contain credential, do not log arguments here
+                // For mount, arguments may contain credential, log arguments if requested
+                if (config.LogArguments) logger.LogDebug("Arguments: {0}", argumentsStr);
+
                 await Task.Run(() =>
                 {
                     using (var process = Process.Start(info))
@@ -47,10 +50,12 @@ namespace Csi.Helpers.Azure
                 });
 
                 logger.LogDebug("Exit code: {0}", exitCode);
-                if (exitCode != 0) throw new Exception($"Executable {path} failed with {exitCode}");
+                //if (exitCode != 0) throw new Exception($"Executable {path} failed with {exitCode}");
 
                 _s.Commit();
             }
+
+            return exitCode;
         }
     }
 }

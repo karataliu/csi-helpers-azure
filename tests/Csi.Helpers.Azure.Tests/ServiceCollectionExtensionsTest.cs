@@ -12,7 +12,7 @@ namespace Csi.Helpers.Azure.Tests
                 .AddLogging()
                 .AddExternalRunner()
                 .BuildServiceProvider();
-            Assert.NotNull(sp.GetRequiredService<IExternalRunner>());
+            Assert.NotNull(sp.GetRequiredService<IExternalRunnerFactory>());
         }
 
         [Fact]
