@@ -20,6 +20,7 @@ namespace Csi.Helpers.Azure.Tests
 }
 ";
             var im = InstanceMetadata.Parse(json);
+            Assert.Equal("eastus", im.Compute.Location);
             Assert.Equal("n111", im.Compute.Name);
             Assert.Equal("RG1", im.Compute.ResourceGroupName);
             Assert.Equal("FE9CE53F-277C-48BB-950D-265EBA922B9D", im.Compute.SubscriptionId);
@@ -46,6 +47,7 @@ namespace Csi.Helpers.Azure.Tests
 }
 ";
             var im = InstanceMetadata.Parse(json);
+            Assert.Equal("eastus", im.Compute.Location);
             Assert.Equal("agents_15", im.Compute.Name);
             Assert.Equal("rg2", im.Compute.ResourceGroupName);
             Assert.Equal("FE9CE53F-277C-48BB-950D-265EBA922B9D", im.Compute.SubscriptionId);
