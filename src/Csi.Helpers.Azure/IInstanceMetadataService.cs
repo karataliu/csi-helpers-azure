@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Extensions.Logging;
 using Util.Extensions.Logging.Step;
 
@@ -9,7 +8,7 @@ namespace Csi.Helpers.Azure
 {
     public interface IInstanceMetadataService
     {
-        Task<ResourceId> GetResourceId();
+        Task<InstanceMetadata> GetInstanceMetadataAsync();
     }
 
     class InstanceMetadataService : IInstanceMetadataService
@@ -18,25 +17,29 @@ namespace Csi.Helpers.Azure
         private const string endpoint = "http://169.254.169.254/metadata/instance?api-version=" + apiVersion;
         private readonly ILogger<InstanceMetadataService> logger;
 
+        private InstanceMetadata result = null;
+
         public InstanceMetadataService(ILogger<InstanceMetadataService> logger) => this.logger = logger;
 
-        public async Task<ResourceId> GetResourceId()
+        public async Task<InstanceMetadata> GetInstanceMetadataAsync()
         {
-            ResourceId result = null;
-            using (var s = logger.StepDebug("Loading resource id from instance metadata"))
+            if (result == null)
             {
-                var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("Metadata", "True");
-                try
+                using (var s = logger.StepDebug("Loading instance metadata"))
                 {
-                    var response = await client.GetStringAsync(endpoint);
-                    result = InstanceMetadata.Parse(response).GetResourceId();
+                    var client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("Metadata", "True");
+                    try
+                    {
+                        var response = await client.GetStringAsync(endpoint);
+                        result = InstanceMetadata.Parse(response);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogWarning("Error when loading instance metadata: {0}", ex.Message);
+                    }
+                    s.Commit();
                 }
-                catch (Exception ex)
-                {
-                    logger.LogWarning("Error when loading resource id from instance metadata: {0}", ex.Message);
-                }
-                s.Commit();
             }
 
             return result;
