@@ -18,6 +18,6 @@
             return (int)(((sizeInByte - 1) >> 30) + 1);
         }
 
-        public long FromGigibyte(int sizeInGigibyte) => sizeInGigibyte << 30;
+        public long FromGigibyte(int sizeInGigibyte) => ((long)sizeInGigibyte) << 30;
     }
 }

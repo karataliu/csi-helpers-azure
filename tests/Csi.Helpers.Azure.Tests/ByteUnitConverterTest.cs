@@ -20,6 +20,8 @@ namespace Csi.Helpers.Azure.Tests
         [Theory]
         [InlineData(0L, 0)]
         [InlineData(1L<<30, 1)]
+        [InlineData(2L<<30, 2)]
+        [InlineData(3L<<30, 3)]
         public void FromGigibyte(long expected, int input) => Assert.Equal(expected, buc.FromGigibyte(input));
     }
 }
