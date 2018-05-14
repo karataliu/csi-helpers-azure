@@ -37,6 +37,8 @@ namespace Csi.Helpers.Azure
                 if (config.LogArguments) 
                     logger.LogDebug("Arguments: {0}", argumentsStr);
 
+                // line edit
+                
                 await Task.Run(() =>
                 {
                     using (var process = Process.Start(info))
