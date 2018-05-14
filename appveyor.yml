@@ -3,7 +3,14 @@ branches:
   only:
   - master
 image: Visual Studio 2017
+
+before_build:
+- choco install codecov
+
 build_script:
 - ps: dotnet build
+
 test_script:
 - ps: dotnet test tests\Csi.Helpers.Azure.Tests
+- OpenCover.Console.exe -oldstyle -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test tests\Csi.Helpers.Azure.Tests" -filter:"+[Csi.Helpers.Azure]*" -output:".\coverage.xml"
+- codecov -f "coverage.xml"
