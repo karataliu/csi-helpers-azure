@@ -34,9 +34,12 @@ namespace Csi.Helpers.Azure
             using (var _s = logger.StepDebug("Run executable: {0}", path))
             {
                 // For mount, arguments may contain credential, log arguments if requested
-                if (config.LogArguments)
+                if (config.LogArguments){
                     logger.LogDebug("Arguments: {0}", argumentsStr);
-                System.Console.WriteLine(3312);
+                    System.Console.WriteLine("a");
+                }else {
+                    System.Console.WriteLine(3312);
+                }
 
                 // line edit
                 await Task.Run(() =>
